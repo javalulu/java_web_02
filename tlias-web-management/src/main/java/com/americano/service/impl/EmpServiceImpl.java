@@ -2,6 +2,7 @@ package com.americano.service.impl;
 
 import com.americano.mapper.EmpMapper;
 import com.americano.pojo.Emp;
+import com.americano.pojo.EmpQueryParam;
 import com.americano.pojo.PageResult;
 import com.americano.service.EmpService;
 import com.github.pagehelper.Page;
@@ -32,13 +33,27 @@ public class EmpServiceImpl implements EmpService {
 //    }
 
     // -------------使用PageHelper的分页查询-------------
+//    @Override
+//    public PageResult<Emp> page(Integer page, Integer pageSize, String name, Integer gender, LocalDate begin, LocalDate end) {
+//        // 1.设置分页参数(PageHelper)
+//        PageHelper.startPage(page, pageSize);
+//
+//        // 2.执行查询
+//        List<Emp> empList = empMapper.list(name, gender, begin, end);
+//
+//        //3.解析结果，并封装
+//        Page<Emp> p = (Page<Emp>) empList; // List<Emp>强转为Page<emp>
+//        return new PageResult<Emp>(p.getTotal(), p.getResult());
+//    }
+
+    // -------------使用PageHelper的分页查询-------------优化
     @Override
-    public PageResult<Emp> page(Integer page, Integer pageSize, String name, Integer gender, LocalDate begin, LocalDate end) {
+    public PageResult<Emp> page(EmpQueryParam empQueryParam) {
         // 1.设置分页参数(PageHelper)
-        PageHelper.startPage(page, pageSize);
+        PageHelper.startPage(empQueryParam.getPage(), empQueryParam.getPageSize());
 
         // 2.执行查询
-        List<Emp> empList = empMapper.list(name, gender, begin, end);
+        List<Emp> empList = empMapper.list(empQueryParam);
 
         //3.解析结果，并封装
         Page<Emp> p = (Page<Emp>) empList; // List<Emp>强转为Page<emp>

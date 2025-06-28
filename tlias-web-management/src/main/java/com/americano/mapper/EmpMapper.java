@@ -1,6 +1,7 @@
 package com.americano.mapper;
 
 import com.americano.pojo.Emp;
+import com.americano.pojo.EmpQueryParam;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
@@ -24,6 +25,9 @@ public interface EmpMapper {
     //       2. PageHelper只对PageHelper.startPage后面紧跟的一条查询生效，其他的不生效
     // 实现机制：将一条sql语句通过拼接count(0)和limit...，输出两条sql语句
     // @Select("select e.*, d.name deptName from emp e left join dept d on e.dept_id = d.id order by e.update_time desc")
-    public List<Emp> list(String name, Integer gender, LocalDate begin, LocalDate end);
+//    public List<Emp> list(String name, Integer gender, LocalDate begin, LocalDate end);
+
+    //-----------使用PageHelper插件方法------------优化
+    public List<Emp> list(EmpQueryParam empQueryParam);
 
 }
