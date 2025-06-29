@@ -11,6 +11,7 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import java.time.LocalDate;
@@ -67,12 +68,15 @@ public class EmpServiceImpl implements EmpService {
         return new PageResult<Emp>(p.getTotal(), p.getResult());
     }
 
+    @Transactional //事务管理
     @Override
     public void save(Emp emp) {
         // 1.保存员工基本信息
         emp.setCreateTime(LocalDateTime.now());
         emp.setUpdateTime(LocalDateTime.now());
         empMapper.insert(emp);
+
+//        int i = 1/0;
 
         // 2.保存员工经历信息
         List<EmpExpr> exprList = emp.getExprList();
