@@ -2,10 +2,8 @@ package com.americano.service.impl;
 
 import com.americano.mapper.EmpExprMapper;
 import com.americano.mapper.EmpMapper;
-import com.americano.pojo.Emp;
-import com.americano.pojo.EmpExpr;
-import com.americano.pojo.EmpQueryParam;
-import com.americano.pojo.PageResult;
+import com.americano.pojo.*;
+import com.americano.service.EmpLogService;
 import com.americano.service.EmpService;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
@@ -25,6 +23,9 @@ public class EmpServiceImpl implements EmpService {
 
     @Autowired
     private EmpExprMapper empExprMapper;
+
+    @Autowired
+    private EmpLogService empLogService;
 
     // --------------原始分页查询--------------
 //    @Override
@@ -68,25 +69,29 @@ public class EmpServiceImpl implements EmpService {
         return new PageResult<Emp>(p.getTotal(), p.getResult());
     }
 
-    @Transactional //事务管理
+    @Transactional //事务管理 -- 默认出现运行时异常RunTime Exception才会回滚，使用@Transactional(rollbackFor = {Exception.class})设置所有异常都回滚
     @Override
     public void save(Emp emp) {
-        // 1.保存员工基本信息
-        emp.setCreateTime(LocalDateTime.now());
-        emp.setUpdateTime(LocalDateTime.now());
-        empMapper.insert(emp);
+        try {
+            // 1.保存员工基本信息
+            emp.setCreateTime(LocalDateTime.now());
+            emp.setUpdateTime(LocalDateTime.now());
+            empMapper.insert(emp);
 
-//        int i = 1/0;
-
-        // 2.保存员工经历信息
-        List<EmpExpr> exprList = emp.getExprList();
-        //判断是否有工作经历
-        if(!CollectionUtils.isEmpty(exprList)){
-            //遍历集合，为empId赋值
-            exprList.forEach(empExpr -> {
-                empExpr.setEmpId(emp.getId());
-            });
-            empExprMapper.insertBatch(exprList);
+            // 2.保存员工经历信息
+            List<EmpExpr> exprList = emp.getExprList();
+            //判断是否有工作经历
+            if(!CollectionUtils.isEmpty(exprList)){
+                //遍历集合，为empId赋值
+                exprList.forEach(empExpr -> {
+                    empExpr.setEmpId(emp.getId());
+                });
+                empExprMapper.insertBatch(exprList);
+            }
+        } finally {
+            //记录操作日志
+            EmpLog empLog = new EmpLog(null, LocalDateTime.now(), "新增员工： " + emp);
+            empLogService.insertLog(empLog);
         }
     }
 }
