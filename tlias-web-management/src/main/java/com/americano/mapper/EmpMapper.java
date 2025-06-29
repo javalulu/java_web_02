@@ -4,6 +4,7 @@ import com.americano.pojo.Emp;
 import com.americano.pojo.EmpQueryParam;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.Select;
 
 import java.time.LocalDate;
@@ -33,6 +34,7 @@ public interface EmpMapper {
 
 
     //新增员工基本信息
+    @Options(useGeneratedKeys = true, keyProperty = "id") //获取到生成的主键 -- mybatis主键返回
     @Insert("insert into emp(username, name, gender, phone, job, salary, image, entry_date, dept_id, create_time, update_time)" +
             "    values(#{username}, #{name}, #{gender}, #{phone}, #{job}, #{salary}, #{image}," +
             "           #{entryDate}, #{deptId}, #{createTime}, #{updateTime})")

@@ -1,7 +1,9 @@
 package com.americano.service.impl;
 
+import com.americano.mapper.EmpExprMapper;
 import com.americano.mapper.EmpMapper;
 import com.americano.pojo.Emp;
+import com.americano.pojo.EmpExpr;
 import com.americano.pojo.EmpQueryParam;
 import com.americano.pojo.PageResult;
 import com.americano.service.EmpService;
@@ -9,6 +11,7 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -18,6 +21,9 @@ import java.util.List;
 public class EmpServiceImpl implements EmpService {
     @Autowired
     private EmpMapper empMapper;
+
+    @Autowired
+    private EmpExprMapper empExprMapper;
 
     // --------------原始分页查询--------------
 //    @Override
@@ -69,5 +75,14 @@ public class EmpServiceImpl implements EmpService {
         empMapper.insert(emp);
 
         // 2.保存员工经历信息
+        List<EmpExpr> exprList = emp.getExprList();
+        //判断是否有工作经历
+        if(!CollectionUtils.isEmpty(exprList)){
+            //遍历集合，为empId赋值
+            exprList.forEach(empExpr -> {
+                empExpr.setEmpId(emp.getId());
+            });
+            empExprMapper.insertBatch(exprList);
+        }
     }
 }
