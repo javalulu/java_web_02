@@ -39,4 +39,11 @@ public interface EmpMapper {
             "    values(#{username}, #{name}, #{gender}, #{phone}, #{job}, #{salary}, #{image}," +
             "           #{entryDate}, #{deptId}, #{createTime}, #{updateTime})")
     void insert(Emp emp);
+
+    //根据id批量删除员工基本信息 -- 动态sql
+    void deleteByIds(List<Integer> ids);
+
+    //根据id查询员工信息以及员工工作经历
+    Emp getById(Integer id);
+
 }
