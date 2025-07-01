@@ -46,4 +46,6 @@ public interface EmpMapper {
     //根据id查询员工信息以及员工工作经历
     Emp getById(Integer id);
 
+    // 根据id修改员工基本信息
+    void updateById(Emp emp);
 }

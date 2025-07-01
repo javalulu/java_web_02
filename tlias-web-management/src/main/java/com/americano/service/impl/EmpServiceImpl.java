@@ -14,6 +14,7 @@ import org.springframework.util.CollectionUtils;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -109,5 +110,26 @@ public class EmpServiceImpl implements EmpService {
     @Override
     public Emp getInfo(Integer id) {
         return empMapper.getById(id);
+    }
+
+    // 修改员工
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public void update(Emp emp) {
+        // 1. 根据id修改员工基本信息
+        emp.setUpdateTime(LocalDateTime.now());
+        empMapper.updateById(emp);
+
+        // 2. 根据id修改员工工作经历信息
+        // 2.1 先根据员工id删除原有的工作经历
+        empExprMapper.deleteByEmpIds(Arrays.asList(emp.getId()));
+
+        // 2.2 再添加新的工作经历
+        List<EmpExpr> exprList = emp.getExprList();
+        if(!CollectionUtils.isEmpty(exprList)){
+            exprList.forEach(empExpr -> empExpr.setEmpId(emp.getId())); // 为每个工作经历赋上对应的员工id值
+            empExprMapper.insertBatch(exprList);
+        }
+
     }
 }
