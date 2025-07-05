@@ -2,10 +2,7 @@ package com.americano.mapper;
 
 import com.americano.pojo.Emp;
 import com.americano.pojo.EmpQueryParam;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Options;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -51,6 +48,11 @@ public interface EmpMapper {
     // 根据id修改员工基本信息
     void updateById(Emp emp);
 
-    //统计员工职位人数
+    // 统计员工职位人数
+    @MapKey("pos") // 加不加都可以，防止mybatis假报错
     List<Map<String, Object>> countEmpJobDate();
+
+    // 统计员工性别人数
+    @MapKey("name") // 加不加都可以，防止mybatis假报错
+    List<Map<String, Object>> countEmpGenderData();
 }
