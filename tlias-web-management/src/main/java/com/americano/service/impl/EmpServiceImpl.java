@@ -130,6 +130,11 @@ public class EmpServiceImpl implements EmpService {
             exprList.forEach(empExpr -> empExpr.setEmpId(emp.getId())); // 为每个工作经历赋上对应的员工id值
             empExprMapper.insertBatch(exprList);
         }
+    }
 
+    //查询全部员工
+    @Override
+    public List<Emp> list() {
+        return empMapper.findAll();
     }
 }

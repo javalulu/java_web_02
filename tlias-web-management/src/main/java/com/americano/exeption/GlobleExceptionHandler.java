@@ -30,4 +30,10 @@ public class GlobleExceptionHandler {
         String[] arr = errMsg.split(" ");
         return Result.error(arr[2] + "已存在");
     }
+
+    @ExceptionHandler
+    public Result handleBusinessExceptionException(BusinessException e) {
+        log.error("服务器异常", e);
+        return Result.error(e.getMessage());
+    }
 }

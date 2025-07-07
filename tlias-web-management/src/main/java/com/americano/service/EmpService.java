@@ -26,4 +26,7 @@ public interface EmpService {
 
     //修改员工
     void update(Emp emp);
+
+    //查询全部员工
+    List<Emp> list();
 }
