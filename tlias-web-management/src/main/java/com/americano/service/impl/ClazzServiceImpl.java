@@ -83,4 +83,12 @@ public class ClazzServiceImpl implements ClazzService {
         }
         clazzMapper.deleteById(id);
     }
+
+    /**
+     * 查询所有班级
+     */
+    @Override
+    public List<Clazz> findAll() {
+        return clazzMapper.findAll();
+    }
 }

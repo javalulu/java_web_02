@@ -10,6 +10,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -70,6 +71,16 @@ public class ClazzController {
         log.info("删除班级id: {}", id);
         clazzService.deleteById(id);
         return Result.success();
+    }
+
+    /**
+     * 查询所有班级
+     */
+    @GetMapping("/list")
+    public Result findAll() {
+        log.info("查询所有班级");
+        List<Clazz> clazzList = clazzService.findAll();
+        return Result.success(clazzList);
     }
 
 }

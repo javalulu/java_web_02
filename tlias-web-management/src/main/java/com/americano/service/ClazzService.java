@@ -5,6 +5,7 @@ import com.americano.pojo.PageResult;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.List;
 
 public interface ClazzService {
     /**
@@ -29,4 +30,8 @@ public interface ClazzService {
 
     // 删除班级
     void deleteById(Integer id);
+
+    // 查询所有班级
+    List<Clazz> findAll();
+
 }
