@@ -1,6 +1,8 @@
 package com.americano.service.impl;
 
+import com.americano.exeption.BusinessException;
 import com.americano.mapper.DeptMapper;
+import com.americano.mapper.EmpMapper;
 import com.americano.pojo.Dept;
 import com.americano.service.DeptService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +17,9 @@ public class DeptServiceImpl implements DeptService {
     @Autowired
     private DeptMapper deptMapper;
 
+    @Autowired
+    private EmpMapper empMapper;
+
     @Override
     public List<Dept> findAll() {
         return deptMapper.findAll();
@@ -22,6 +27,11 @@ public class DeptServiceImpl implements DeptService {
 
     @Override
     public void deleteById(Integer id) {
+        Integer count = empMapper.countByDeptId(id);
+        if (count > 0) {
+            throw new BusinessException("部门下有员工， 不能删除");
+        }
+
         deptMapper.deleteById(id);
     }
 

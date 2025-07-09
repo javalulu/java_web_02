@@ -59,4 +59,8 @@ public interface EmpMapper {
     // 查询全部员工
     @Select("select id, username, password, name, gender, phone, job, salary, image, entry_date, dept_id, create_time, update_time from emp")
     List<Emp> findAll();
+
+    // 根据部门id查询员工数量
+    @Select("select count(*) from emp where dept_id = #{id};")
+    Integer countByDeptId(Integer id);
 }
